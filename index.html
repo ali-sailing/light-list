@@ -1,0 +1,158 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Light List Generator</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/bootstrap.min.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=2">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row noprint">
+      <h1>Light List Generator</h1>
+      
+    </div>
+    <form id="mainForm" class="noprint">
+
+
+
+      <div class="row">
+        <p>Generates a custom light list bound by the SW/NE coordinates below. Output is printer/print-to-PDF friendly. Under development, not to be used for navigation.</p>
+      </div>
+      <div class="form-group row">
+        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-6 col-lg-3">
+          <input type="text" class="form-control" id="inputName" value="My Baltimore List" oninput="el_change()">
+        </div>
+
+        <label for="inputDistrict" class="col-sm-2 col-form-label">District / Volume</label>
+        <div class="col-sm-3">
+          <select class="form-control" id="inputDistrict" oninput="el_change()">
+            <option value="v1d01">Volume 1 - District 1</option>
+            <option value="v2d05" selected="selected">Volume 2 - District 5</option>
+            <option value="v3d07">Volume 3 - District 7</option>
+            <option value="v4d08">Volume 4 - District 8 Gulf</option>
+            <option value="v5d08">Volume 5 - District 8 Western</option>
+            <option value="v6d11">Volume 6 - District 11</option>
+            <option value="v6d13">Volume 6 - District 13</option>
+            <option value="v6d14">Volume 6 - District 14</option>
+            <option value="v6d17">Volume 6 - District 17</option>
+            <option value="v7d9">Volume 7 - District 9</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <h4>Southwest Corner</h4>
+      </div>
+      <div class="form-group row">
+        <label for="input0LatDeg" class="col-sm-2 col-form-label">Latitude</label>
+        <div class="col-sm-10 col-lg-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="input0LatDeg" value="39" oninput="el_change()" required step="1" min="-90" max="90"><span class="form-annot">&deg;</span>
+            <input type="number" class="form-control" id="input0LatMin" value="12.45" oninput="el_change()" required step=".01" min="0" max="59.99"><span class="form-annot">&apos;</span>
+            <small id="latHelp" class="form-text text-muted">
+              Positive for North
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label for="input0LonDeg" class="col-sm-2 col-form-label">Longitude</label>
+        <div class="col-sm-10 col-lg-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="input0LonDeg" value="-76" oninput="el_change()" required step="1" min="-180" max="180"><span class="form-annot">&deg;</span>
+            <input type="number" class="form-control" id="input0LonMin" value="37.35" oninput="el_change()" required step=".01" min="0" max="59.99"><span class="form-annot">&apos;</span>
+            <small id="latHelp" class="form-text text-muted">
+              Positive for East
+            </small>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <h4>Northeast Corner</h4>
+      </div>
+      <div class="form-group row">
+        <label for="input1LatDeg" class="col-sm-2 col-form-label">Latitude</label>
+        <div class="col-sm-10 col-lg-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="input1LatDeg" value="39" oninput="el_change()" required step="1" min="-90" max="90"><span class="form-annot">&deg;</span>
+            <input type="number" class="form-control" id="input1LatMin" value="16.75" oninput="el_change()" required step=".01" min="0" max="59.99"><span class="form-annot">&apos;</span>
+            <small id="latHelp" class="form-text text-muted">
+              Positive for North
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="form-group row">
+        <label for="input1LonDeg" class="col-sm-2 col-form-label">Longitude</label>
+        <div class="col-sm-10 col-lg-6">
+          <div class="input-group">
+            <input type="number" class="form-control" id="input1LonDeg" value="-76" oninput="el_change()" required step="1" min="-180" max="180"><span class="form-annot">&deg;</span>
+            <input type="number" class="form-control" id="input1LonMin" value="22.40" oninput="el_change()" required step=".01" min="0" max="59.99"><span class="form-annot">&apos;</span>
+            <small id="latHelp" class="form-text text-muted">
+              Positive for East
+            </small>
+          </div>
+        </div>
+
+      </div>      
+
+      <div class="form-group row">
+        <div class="col-sm-12 col-lg-12">
+            <button type="button" class="btn btn-primary" onclick="generate_light_list()">Generate Light List</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="row">
+      <div class="col-sm-12 col-lg-12">
+        <h4 id="listName"></h4>
+        <span id="bounds"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-lg-12">
+        <span id="statusText"></span>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name and Location</th>
+          <th>Position</th>
+          <th>Characteristic</th>
+          <th>Height</th>
+          <th>Range</th>
+          <th>Structure</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody id="lightListBody">
+      </tbody>
+    </table>
+  
+  </div>
+
+
+  <script src="js/modernizr-3.12.0.min.js"></script>
+  <script src="js/luxon.min.js"></script>
+  <script src="js/app.js?v=14"></script>
+
+</body>
+
+</html>
